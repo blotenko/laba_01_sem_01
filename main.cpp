@@ -161,40 +161,6 @@ void MergeSort(T* a, int start, int end){
 
 }
 
-
-
-
-
-
-
-
-
-
-
-//int main(){
-//    int size =5;
-//    NodeMass<string> mass{size};
-//    mass.push("5");
-//    mass.push("7");
-//    mass.push("4");
-//    mass.push("3");
-//    mass.push("1");
-////    mass.push(5);
-////    mass.push(7);
-////    mass.push(4);
-////    mass.push(3);
-////    mass.push(1.5);
-//    mass.print();
-//   // insertion_sort(mass.getData(),0,size-1);
-//    //Quicksort(mass.getData(),0,size-1);
-//    MergeSort(mass.getData(), 0, size-1);
-//    mass.print();
-//    return 0;
-//}
-
-
-
-
 template <class T>
 class Node {
 public:
@@ -213,15 +179,24 @@ public:
     Node<T>* sorted;
     Node<T>* end;
  
-    void push(T val)
-    {
+    void push(T val){
         Node<T>* newnode = new Node<T>(val);
         newnode->next = head;
         head = newnode;
     }
- 
-    void insertionSort(Node<T>* headref)
-    {
+    void printlist(Node<T>* head){
+        while (head != NULL) {
+            cout << head->val << " ";
+            head = head->next;
+        }
+    }
+     Node<T>* getTail(Node<T>* cur){
+        while (cur != NULL && cur->next != NULL)
+            cur = cur->next;
+        return cur;
+    }
+    
+    void insertionSort(Node<T>* headref){
         sorted = NULL;
         Node<T>* current = headref;
         while (current != NULL) {
@@ -231,10 +206,7 @@ public:
         }
         head = sorted;
     }
- 
-
-    void sortedInsert(Node<T>* newnode)
-    {
+    void sortedInsert(Node<T>* newnode){
         if (sorted == NULL || sorted->val >= newnode->val) {
             newnode->next = sorted;
             sorted = newnode;
@@ -249,19 +221,7 @@ public:
             current->next = newnode;
         }
     }
-    void printlist(Node<T>* head)
-    {
-        while (head != NULL) {
-            cout << head->val << " ";
-            head = head->next;
-        }
-    }
-     Node<T>* getTail(Node<T>* cur)
-    {
-        while (cur != NULL && cur->next != NULL)
-            cur = cur->next;
-        return cur;
-    }
+    
      Node<T>* partition( Node<T>* head,  Node<T>* end, Node<T>** newHead,
                             Node<T>** newEnd){
         struct Node<T>* pivot = end;
@@ -290,7 +250,6 @@ public:
         (*newEnd) = tail;
         return pivot;
     }
-     
      Node<T>* quickSortRecur(struct Node<T>* head,struct Node<T>* end){
         if (!head || head == end)
             return head;
@@ -309,7 +268,6 @@ public:
             tmp = getTail(newHead);
             tmp->next = pivot;
         }
-     
         pivot->next = quickSortRecur(pivot->next, newEnd);
      
         return newHead;
@@ -320,8 +278,7 @@ public:
     }
     
     
-    void MergeSort(struct Node<T>** headRef)
-    {
+    void MergeSort(struct Node<T>** headRef){
         struct Node<T>* head = *headRef;
         struct Node<T>* a;
         struct Node<T>* b;
@@ -333,9 +290,7 @@ public:
         MergeSort(&b);
         *headRef = SortedMerge(a, b);
     }
-
-    struct Node<T>* SortedMerge(struct Node<T>* a, struct Node<T>* b)
-    {
+    struct Node<T>* SortedMerge(struct Node<T>* a, struct Node<T>* b){
         struct Node<T>* result = NULL;
              if (a == NULL)
             return (b);
@@ -351,11 +306,8 @@ public:
         }
         return (result);
     }
-    
-    
     void FrontBackSplit(struct Node<T>* source,
-                        struct Node<T>** frontRef, struct Node<T>** backRef)
-    {
+                        struct Node<T>** frontRef, struct Node<T>** backRef){
         struct Node<T>* fast;
         struct Node<T>* slow;
         slow = source;
@@ -372,52 +324,16 @@ public:
         slow->next = NULL;
     }
     
-    
 };
-
-
-
-//int main()
-//{
-//    LinkedlistIS<string> list;
-//    list.head = NULL;
-//    list.push("1");
-//    list.push("3");
-//    list.push("4");
-//    list.push("7");
-//    list.push("5");
-//    cout << "Linked List before sorting" << endl;
-//    list.printlist(list.head);
-//    cout << endl;
-//   //list.insertionSort(list.head);
-//   //list.quickSort(&list.head);
-//    list.MergeSort(&list.head);
-//    cout << "Linked List After sorting" << endl;
-//    list.printlist(list.head);
-//}
-
-
-
-
-
-
 
 template <class T>
 class List{
 public:
     list<T> list;
-    List* next ;
-    List* prev;
 };
 
-
-
-
-
 template <typename T>
-void showlist(List<T> g)
-{
-    
+void showlist(List<T> g){
     list <int> :: iterator it;
     for( auto it = g.list.begin(); it != g.list.end(); ++it)
         cout << *it<<" ";
@@ -433,41 +349,74 @@ List<T> listToMass(List<T> list,int size){
        mass[j]=i;
         j++;
     }
-    insertion_sort(mass,0,size-1);
+    
+    //insertion_sort(mass,0,size-1);
     //Quicksort(mass,0,size-1);
     //MergeSort(mass, 0, size-1);
-
     for(int i = 0;i<size;i++){
         newList.list.push_back(mass[i]);
     }
-    
       return newList;
 }
 
+void listByLib(){
 
-int main()
-{
+    List<string> ml;
+        ml.list.push_back("1.2");
+        ml.list.push_back("3.3");
+        ml.list.push_back("4.4");
+        ml.list.push_back("7.7");
+        ml.list.push_back("5.5");
+        showlist(ml);
+        ml=listToMass(ml, 5);
+        showlist(ml);
+}
+void listByLinkedList(){
+            LinkedlistIS<string> list;
+            list.head = NULL;
+            list.push("1.1");
+            list.push("3.3");
+            list.push("4.4");
+            list.push("7.7");
+            list.push("5.5");
+            list.printlist(list.head);
+            cout << endl;
+           //list.insertionSort(list.head);
+           //list.quickSort(&list.head);
+            list.MergeSort(&list.head);
+            list.printlist(list.head);
+}
+void listByMass(){
+    int size =5;
+    NodeMass<string> mass{size};
+    mass.push("5.5");
+    mass.push("7.7");
+    mass.push("4.4");
+    mass.push("3.3");
+    mass.push("1.1");
+    mass.print();
+   // insertion_sort(mass.getData(),0,size-1);
+    //Quicksort(mass.getData(),0,size-1);
+    MergeSort(mass.getData(), 0, size-1);
+    mass.print();
+}
 
-
-    //List<double> ml;
-  // List<int> ml;
-    List<double> ml;
-
-
-//    ml.list.push_back("1");
-//    ml.list.push_back("3");
-//    ml.list.push_back("4");
-//    ml.list.push_back("7");
-//    ml.list.push_back("5");
-
-    ml.list.push_back(1.4);
-    ml.list.push_back(3.8);
-    ml.list.push_back(4.6);
-    ml.list.push_back(7.4);
-    ml.list.push_back(5.2);
-    showlist(ml);
-    ml=listToMass(ml, 5);
-    showlist(ml);
+int main(){
+    int choice;
+    cout<<"You will work with lists implemented through: "<<endl;
+    cout<<"1. Massive"<<endl;
+    cout<<"2. Linked list"<<endl;
+    cout<<"3. Library facilities"<<endl;
+    cin>>choice;
+    if(choice!=1 && choice!=2 && choice!=3 ){
+        cout<<"Error"<<endl;
+    }
+    else{
+        switch (choice) {
+            case 1: listByMass();break;
+            case 2: listByLinkedList(); break;
+            case 3: listByLib();break;
+        }
+    }
     return 0;
-
 }
