@@ -23,12 +23,13 @@ using namespace std;
 
 template <class T>
  class NodeMass{
- public:
+ private:
     T* data;
      T* pnext;
      T head;
      int last;
  public:
+     T* getData()const{return data;}
      NodeMass(int size){
          data = new T[size];
          pnext = new T[size];
@@ -59,100 +60,115 @@ template <class T>
          }
          cout<<endl;
      }
-     void exch(T &A, T &B)
-     {
-         T t = A; A = B; B = t;
-     }
-       
-     void compexch(T &A, T &B)
-     {
-         if (B < A) exch(A, B);
-     }
-       
-     void insertion_sort(NodeMass a, int L, int R)
-     {
-         for(int i = R; i > L; i--)
-             compexch(data[i - 1], data[i]);
-       
-         for (int i = L + 2; i <= R; i++)
-         {
-             int j = i;
-             T cur = data[j];
-             while (data[j - 1] > cur)
-             {
-                 data[j] = data[j - 1];
-                 j--;
-             }
-             data[j] = cur;
-         }
-     }
-     
-     
-     
-     int Partition(NodeMass a, int start, int end){
-         int pivot = end;
-         int j = start;
-         for(int i=start;i<end;++i){
-             if(data[i]<data[pivot]){
-                 swap(data[i],data[j]);
-                 ++j;
-             }
-         }
-         swap(data[j],data[pivot]);
-         return j;
-     }
-     void Quicksort(NodeMass a, int start, int end ){
-         if(start<end){
-             int p = Partition(a,start,end);
-             Quicksort(a,start,p-1);
-             Quicksort(a,p+1,end);
-         }
-     }
-     
-     
-     
-     void Merge(NodeMass a, int start, int end){
-         int z, x, y, mid;
-         T temp[(end - start + 1)];
-         mid = (start + end) / 2;
-         z = 0;
-         x = start;
-         y = mid + 1;
-         while (x <= mid && y <= end){
-             if (data[x] < data[y]){
-                 temp[z] = data[x];
-                 ++x, ++z;
-             }
-             else{
-                 temp[z] = data[y];
-                 ++y, ++z;
-             }
-         }
-         while (x <= mid){
-             temp[z] = data[x];
-             ++x, ++z;
-         }
-         while (y <= end){
-             temp[z] = data[y];
-             ++y, ++z;
-         }
-         for (int i = start; i <= end; ++i){
-             data[i] = temp[i - start];
-         }
-     }
-     void MergeSort(NodeMass a, int start, int end){
-         if (start < end){
-             int mid = (start + end) / 2;
-             MergeSort(a, start, mid);
-             MergeSort(a, mid + 1, end);
-             Merge(a, start, end);
-         }
-
-     }
-     
-
-     
  };
+
+
+
+
+template <typename T>
+void exch(T &A, T &B)
+{
+    T t = A; A = B; B = t;
+}
+template <typename T>
+void compexch(T &A, T &B)
+{
+    if (B < A) exch(A, B);
+}
+template <typename T>
+void insertion_sort( T* a, int L, int R)
+{
+    for(int i = R; i > L; i--)
+        compexch(a[i - 1], a[i]);
+  
+    for (int i = L + 2; i <= R; i++)
+    {
+        int j = i;
+        T cur = a[j];
+        while (a[j - 1] > cur)
+        {
+            a[j] = a[j - 1];
+            j--;
+        }
+        a[j] = cur;
+    }
+}
+
+
+
+template <typename T>
+int Partition(T* a, int start, int end){
+    int pivot = end;
+    int j = start;
+    for(int i=start;i<end;++i){
+        if(a[i]<a[pivot]){
+            swap(a[i],a[j]);
+            ++j;
+        }
+    }
+    swap(a[j],a[pivot]);
+    return j;
+}
+template <typename T>
+void Quicksort(T* a, int start, int end ){
+    if(start<end){
+        int p = Partition(a,start,end);
+        Quicksort(a,start,p-1);
+        Quicksort(a,p+1,end);
+    }
+}
+
+
+
+template <typename T>
+void Merge(T* a, int start, int end){
+    int z, x, y, mid;
+    T temp[(end - start + 1)];
+    mid = (start + end) / 2;
+    z = 0;
+    x = start;
+    y = mid + 1;
+    while (x <= mid && y <= end){
+        if (a[x] < a[y]){
+            temp[z] = a[x];
+            ++x, ++z;
+        }
+        else{
+            temp[z] = a[y];
+            ++y, ++z;
+        }
+    }
+    while (x <= mid){
+        temp[z] = a[x];
+        ++x, ++z;
+    }
+    while (y <= end){
+        temp[z] = a[y];
+        ++y, ++z;
+    }
+    for (int i = start; i <= end; ++i){
+        a[i] = temp[i - start];
+    }
+}
+template <typename T>
+void MergeSort(T* a, int start, int end){
+    if (start < end){
+        int mid = (start + end) / 2;
+        MergeSort(a, start, mid);
+        MergeSort(a, mid + 1, end);
+        Merge(a, start, end);
+    }
+
+}
+
+
+
+
+
+
+
+
+
 
 
 //int main(){
@@ -169,7 +185,9 @@ template <class T>
 ////    mass.push(3);
 ////    mass.push(1.5);
 //    mass.print();
-//    mass.MergeSort(mass, 0, size-1);
+//   // insertion_sort(mass.getData(),0,size-1);
+//    //Quicksort(mass.getData(),0,size-1);
+//    MergeSort(mass.getData(), 0, size-1);
 //    mass.print();
 //    return 0;
 //}
@@ -378,62 +396,78 @@ public:
 //    list.printlist(list.head);
 //}
 
-//template <typename T>
-//void exch(T &A, T &B)
-//{
-//    T t = A; A = B; B = t;
-//}
-//template <typename T>
-//void compexch(T &A, T &B)
-//{
-//    if (B < A) exch(A, B);
-//}
-//template <typename T>
-//void insertion_sort(list <T> a, int L, int R)
-//{
-//    list <T> :: iterator it;
-//    for(int i = R; i > L; i--)
-//        compexch(*it-1, *it);
-//
-//    for (int i = L + 2; i <= R; i++)
-//    {
-//        int j = i;
-//        T cur = data[j];
-//        while (data[j - 1] > cur)
-//        {
-//            data[j] = data[j - 1];
-//            j--;
-//        }
-//        data[j] = cur;
-//    }
-//}
 
-template <class T> class List{
+
+
+
+
+
+template <class T>
+class List{
 public:
-    list<T> ml;
+    list<T> list;
+    List* next ;
+    List* prev;
 };
 
 
 
 
-jfvoid showlist(list <int> g)
+
+template <typename T>
+void showlist(List<T> g)
 {
+    
     list <int> :: iterator it;
-    for(it = g.begin(); it != g.end(); ++it)
-        cout << '\t' << *it;
+    for( auto it = g.list.begin(); it != g.list.end(); ++it)
+        cout << *it<<" ";
     cout << '\n';
 }
-  
+
+template <typename T>
+List<T> listToMass(List<T> list,int size){
+    T* mass = new T[size];
+    List<T> newList;
+    int j =0;
+    for(auto i : list.list){
+       mass[j]=i;
+        j++;
+    }
+    insertion_sort(mass,0,size-1);
+    //Quicksort(mass,0,size-1);
+    //MergeSort(mass, 0, size-1);
+
+    for(int i = 0;i<size;i++){
+        newList.list.push_back(mass[i]);
+    }
+    
+      return newList;
+}
+
+
 int main()
 {
-  
-    list <int> gqlist1, gqlist2;
-   
+
+
+    //List<double> ml;
+  // List<int> ml;
     List<double> ml;
-    ml.ml.push_back(2.3);
-    
-    showlist(ml.ml);
-  
+
+
+//    ml.list.push_back("1");
+//    ml.list.push_back("3");
+//    ml.list.push_back("4");
+//    ml.list.push_back("7");
+//    ml.list.push_back("5");
+
+    ml.list.push_back(1.4);
+    ml.list.push_back(3.8);
+    ml.list.push_back(4.6);
+    ml.list.push_back(7.4);
+    ml.list.push_back(5.2);
+    showlist(ml);
+    ml=listToMass(ml, 5);
+    showlist(ml);
     return 0;
-  
+
 }
