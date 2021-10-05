@@ -323,8 +323,215 @@ public:
         *backRef = slow->next;
         slow->next = NULL;
     }
+    struct Node<T>* swap(struct Node<T>* ptr1, struct Node<T>* ptr2)
+    {
+        struct Node<T>* tmp = ptr2->next;
+        ptr2->next = ptr1;
+        ptr1->next = tmp;
+        return ptr2;
+    }
+      
+    void bubbleSort(struct Node<T>** head, int count){
+        struct Node<T>** h;
+        int i, j, swapped;
+        for (i = 0; i <= count; i++){
+            h = head;
+            swapped = 0;
+            for (j = 0; j < count - i - 1; j++){
+      
+                struct Node<T>* p1 = *h;
+                struct Node<T>* p2 = p1->next;
+                if (p1->val > p2->val){
+                *h = swap(p1, p2);
+                    swapped = 1;
+                }
+                h = &(*h)->next;
+            }
+            if (swapped == 0)
+                break;
+        }
+    }
+    void swap2(LinkedlistIS<T>* l, Node<T>* A) {
+        
+        T temp = A->val;
+            A->val = A->next->val;
+            A->next->val = temp;
+
+
+    }
+    
+    void shakerSort(LinkedlistIS<T>* list) {
+        Node<T>* bubble_tail = 0;
+        int n = 0;
+        do {
+            Node<T>* current = list->head;
+            Node<T>* last_swp = list->head;
+            do
+            {
+                n++;
+                if (current ->val > current->next->val)
+                {
+                    last_swp = current->next;
+                    if (current->next == bubble_tail)
+                    {
+                        bubble_tail = current;
+                    }
+                    swap2(list, current);
+                }
+                else {
+                    current = current->next;
+                }
+            } while (current != bubble_tail && current ->next);
+            if (last_swp != bubble_tail)
+            {
+                bubble_tail = last_swp;
+            }
+        } while (bubble_tail->prev);
+    }
+    
     
 };
+
+
+
+template <typename T>
+void BubbleSort(T *massiv, int size)
+{
+  T temp;
+  for (int i = 1; i < size; i++)
+  {
+    for (int j = 0; j < size-1; j++)
+    {
+      if (massiv[j] > massiv[j+1])
+      {
+        temp = massiv[j];
+        massiv[j] = massiv[j+1];
+        massiv[j+1] = temp;
+      }
+    }
+  }
+}
+
+
+template <class T>
+void swapEl(T *arr, int i)
+{
+    T buff;
+    buff = arr[i];
+    arr[i] = arr[i - 1];
+    arr[i - 1] = buff;
+}
+
+template <class T>
+void ShakerSort(T *arr, int size)
+{
+    int leftMark = 1;
+    int rightMark = size - 1;
+    while (leftMark <= rightMark)
+    {
+        for (int i = rightMark; i >= leftMark; i--)
+        if (arr[i - 1] > arr[i]) swapEl(arr, i);
+        leftMark++;
+
+
+        for (int i = leftMark; i <= rightMark; i++)
+        if (arr[i - 1] > arr[i]) swapEl(arr, i);
+        rightMark--;
+    }
+}
+
+
+
+template<typename T,size_t len>
+static void countingSort(array<T,len>& items,const int exp,int size) {
+
+    //Range for counting array
+    const unsigned int RANGE = 255;
+    std::vector<T> count(255,0);
+
+    //Counting each elements numbers of time they appered
+    for(unsigned int i = 0; i <size ; ++i) {
+        count[fmod(( items[i]/exp ), 10)]++;
+        //cout<<((unsigned)items[i]/exp ) % 10<<"++"<<endl;
+    }
+
+
+    //Modifiying each count such that each element at each index stors the sum of previous counts
+    for(auto it = std::next(count.begin()) ; it != count.end() ; it = std::next(it)) {
+        *it += *(std::prev(it));
+    }
+
+    //Ouput variable where the sorted element will be stored
+    std::array<T,len> output;
+    for(int i = size-1 ; i  >=-1 ; i--) {
+        output[--count[ fmod(( items[i]/exp ), 10)]] = items[i];
+    }
+
+
+    //copying variable to the original array
+    std::move(output.begin(),output.end(),items.begin());
+}
+
+template<class T>
+void radixSort(T& items,int size) {
+    auto max = *(std::max_element(items.begin(),items.end()));
+    for(int i = 1 ; max/i > 0 ; i *= 10){
+        countingSort(items,i,size);
+    }
+}
+template<class T>
+void printElement(const T& items,const std::string& heading) {
+    std::cout << heading <<std::endl;
+    //Printing Element to standart output
+    std::copy(items.begin(),items.end(),
+        std::ostream_iterator<typename T::value_type>(std::cout," "));
+    std::cout << std::endl;
+}
+
+template<typename  T>
+static void BucketSort(T* data, int count) {
+    T minValue = data[0];
+    T maxValue = data[0];
+
+    for (int i = 1; i < count; i++)
+    {
+        if (data[i] > maxValue)
+            maxValue = data[i];
+        if (data[i] < minValue)
+            minValue = data[i];
+    }
+
+    T bucketLength = maxValue - minValue + 1;
+    vector<T>* bucket = new vector<T>[bucketLength];
+
+    for (int i = 0; i < bucketLength; i++)
+    {
+        bucket[i] = vector<T>();
+    }
+
+    for (int i = 0; i < count; i++)
+    {
+        bucket[(int)data[i] - (int)minValue].push_back(data[i]);
+    }
+
+    int k = 0;
+    for (int i = 0; i < bucketLength; i++)
+    {
+        int bucketSize = bucket[i].size();
+
+        if (bucketSize > 0)
+        {
+            for (int j = 0; j < bucketSize; j++)
+            {
+                data[k] = bucket[i][j];
+                k++;
+            }
+        }
+    }
+}
+
+
+
 
 template <class T>
 class List{
@@ -353,15 +560,17 @@ List<T> listToMass(List<T> list,int size){
     //insertion_sort(mass,0,size-1);
     //Quicksort(mass,0,size-1);
     //MergeSort(mass, 0, size-1);
+   // BubbleSort(mass, size);
+    ShakerSort(mass, size);
     for(int i = 0;i<size;i++){
         newList.list.push_back(mass[i]);
     }
       return newList;
 }
 
-void listByLib(){
 
-    List<string> ml;
+void listByLib(){
+        List<string> ml;
         ml.list.push_back("1.2");
         ml.list.push_back("3.3");
         ml.list.push_back("4.4");
@@ -383,22 +592,39 @@ void listByLinkedList(){
             cout << endl;
            //list.insertionSort(list.head);
            //list.quickSort(&list.head);
-            list.MergeSort(&list.head);
+            //list.MergeSort(&list.head);
+           //list.bubbleSort(&list.head, 5);
+            list.shakerSort(&list);
             list.printlist(list.head);
 }
 void listByMass(){
     int size =5;
-    NodeMass<string> mass{size};
-    mass.push("5.5");
-    mass.push("7.7");
-    mass.push("4.4");
-    mass.push("3.3");
-    mass.push("1.1");
-    mass.print();
+    NodeMass<double> mass{size};
+    mass.push(5.2);
+    mass.push(7.2);
+    mass.push(4.1);
+    mass.push(3.1);
+    mass.push(1.3);
+      mass.print();
    // insertion_sort(mass.getData(),0,size-1);
     //Quicksort(mass.getData(),0,size-1);
-    MergeSort(mass.getData(), 0, size-1);
-    mass.print();
+   // MergeSort(mass.getData(), 0, size-1);
+   // BubbleSort(mass.getData(), size);
+    //ShakerSort(mass.getData(), size);
+    
+    
+//    std::array<double,5> elem ;
+//    for(int i = 0; i<size;i++){
+//        double num2 =mass.getData()[i];
+//        elem.at(i) = num2;
+//    }
+//    radixSort(elem,6);
+//    printElement(elem,"Sorted Array:");
+    BucketSort(mass.getData(),5);
+    
+    
+    
+   mass.print();
 }
 
 int main(){
@@ -418,5 +644,13 @@ int main(){
             case 3: listByLib();break;
         }
     }
+
     return 0;
 }
+/*
+ Фігури на площині: прямі та кола. Обчислення точок перетину двох фігур. Операції симетричного відображення відносно заданої прямої та інверсії відносно заданого кола (для точок та цих фігур).
+ 
+ 
+ +* обчислення кутів між фігурами, перевірка збереження кутів під час перетворень
+
+ */
